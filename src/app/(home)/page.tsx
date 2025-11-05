@@ -1,11 +1,13 @@
 import { onBoardUser } from "@/actions/auth"
+import CommunityModal from "@/components/home/community-modal";
+import CommunityToggle from "@/components/home/community-toggle";
 import HomeTemplate from "@/components/home/home-template";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 const page = async () => {
-  // const {user, success} = await onBoardUser();
-
+  const { user, success } = await onBoardUser();
   return (
     <div className="w-full min-h-auto">
       <div className="w-full flex justify-center items-center pt-15 pb-5">
@@ -19,9 +21,20 @@ const page = async () => {
       </div>
 
       <div className="flex items-center justify-center gap-4 text-[#f3f3f3] py-5">
-        <Button className="rounded-[5px]">
-          Community
-        </Button>
+        {user?.isCommunity ? (
+          <>
+            <Link href={'/community'}>
+              <Button className="rounded-[5px]">
+                Community
+              </Button>
+            </Link>
+          </>
+        ) :
+          (
+            <>
+              <CommunityToggle />
+            </>
+          )}
         <Button className="bg-[#1341D0] text-white hover:bg-blue-500 rounded-[5px]">
           <span>
             Get Started
@@ -29,6 +42,8 @@ const page = async () => {
           <ArrowRight />
         </Button>
       </div>
+
+      <CommunityModal />
     </div>
   )
 }

@@ -8,13 +8,13 @@ datasource db {
 }
 
 model User {
-  id      String @id @default(cuid())
-  clerkId String @unique
-  email   String @unique
-
-  firstName String?
-  lastName  String?
-  imageUrl  String?
+  id          String  @id @default(cuid())
+  clerkId     String  @unique
+  email       String  @unique
+  isCommunity Boolean @default(false)
+  firstName   String?
+  lastName    String?
+  imageUrl    String?
 
   bio String? @db.VarChar(500)
 
@@ -45,7 +45,7 @@ model Link {
   clickCount  Int     @default(0)
 
   userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

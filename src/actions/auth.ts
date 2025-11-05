@@ -39,7 +39,7 @@ export const onBoardUser = async () => {
                 }
             },
             include: {
-                username: true
+                username: true,
             }
         })
 

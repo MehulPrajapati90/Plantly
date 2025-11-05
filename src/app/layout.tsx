@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from '@clerk/themes'
 import { ThemeProvider } from "@/components/theme-provider";
 import QueryProvider from "@/components/query-client";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,6 +43,7 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               {children}
+              <Toaster position="bottom-right"/>
             </ThemeProvider>
           </QueryProvider>
         </ClerkProvider>
