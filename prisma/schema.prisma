@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id      String @id @default(cuid())
+  clerkId String @unique
+  email   String @unique
+
+  firstName String?
+  lastName  String?
+  imageUrl  String?
+
+  bio String? @db.VarChar(500)
+
+  link       Link[]
+  socialLink SocialLink[]
+  username   Username[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Username {
+  id       String @id @default(cuid())
+  username String @unique
+  userId   String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Link {
+  id String @id @default(cuid())
+
+  title       String
+  url         String
+  description String? @db.VarChar(500)
+  clickCount  Int     @default(0)
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SocialLink {
+  id       String @id @default(cuid())
+  platform String
+  url      String
+  userId   String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
