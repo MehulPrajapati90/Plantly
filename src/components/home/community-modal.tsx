@@ -27,7 +27,7 @@ const CommunityModal = () => {
 
         if (res.success) {
             toast.success(res.message);
-            
+
             router.push('/community');
         } else {
             toast.error(res.error);
@@ -35,8 +35,6 @@ const CommunityModal = () => {
 
         setIsCommunityOpen();
     }
-
-    console.log(checked)
 
     return (
         <Dialog open={isCommunityOpen} onOpenChange={handleCloseForm}>

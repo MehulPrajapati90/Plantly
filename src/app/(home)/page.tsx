@@ -2,6 +2,7 @@ import { onBoardUser } from "@/actions/auth"
 import CommunityModal from "@/components/home/community-modal";
 import CommunityToggle from "@/components/home/community-toggle";
 import HomeTemplate from "@/components/home/home-template";
+import WorkspaceButton from "@/components/home/workspace-button";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -35,12 +36,7 @@ const page = async () => {
               <CommunityToggle />
             </>
           )}
-        <Button className="bg-[#1341D0] text-white hover:bg-blue-500 rounded-[5px]">
-          <span>
-            Get Started
-          </span>
-          <ArrowRight />
-        </Button>
+        <WorkspaceButton />
       </div>
 
       <CommunityModal />
