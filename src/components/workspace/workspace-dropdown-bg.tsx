@@ -12,11 +12,15 @@ const WorkspaceDropDownBg = ({ active }: WorkspaceDropDownBgProps) => {
     const { setWorkspace, workspace } = useSelectUsernameWorkspace();
     const { data, isPending } = useGetUsernames();
 
-    if(isPending){
+    if (isPending) {
         return <div>...loading</div>
     }
     return (
-        <WorkspaceDropDown active={active} workspaces={data?.usernames!} />
+        <WorkspaceDropDown
+            active={active}
+            workspaces={data?.usernames! || []}
+            onSelect={(ws) => setWorkspace(ws)}
+        />
     )
 }
 

@@ -1,5 +1,5 @@
-import { checkUsername, claimUsername } from "@/actions/workspace";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { checkUsername, claimUsername, getUserByUsername } from "@/actions/workspace";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useCheckUsername = () => {
     const queryClient = useQueryClient();
@@ -17,5 +17,12 @@ export const useClaimUsername = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['username'] })
         }
+    })
+}
+
+export const useGetUserByUsername = (username: string) => {
+    return useQuery({
+        queryKey: ['user'],
+        queryFn: async () => await getUserByUsername(username)
     })
 }

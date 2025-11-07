@@ -81,3 +81,36 @@ export const claimUsername = async (username: string) => {
         }
     }
 }
+
+export const getUserByUsername = async(username: string) => {
+    const user = await currentUser();
+
+    if(!user){
+        return {
+            success: false,
+            error: "unAuthenticated User!"
+        }
+    }
+    try {
+        const response = await client.username.findUnique({
+            where: {
+                username: username
+            },
+            include: {
+                user: true,
+            }
+        })
+
+        return {
+            success: true,
+            user: response?.user,
+            message: "User fetched successfully"
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+        return {
+            success: false,
+            error: "failed to fetch User"
+        }
+    }
+}
