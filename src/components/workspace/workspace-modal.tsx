@@ -20,6 +20,8 @@ const WorkSpaceModal = () => {
     const [error, setError] = useState<string>("");
 
     const handleCloseForm = () => {
+        setSuggestion([]);
+        setUsername("");
         setIsWorkspace();
     }
 
@@ -45,7 +47,8 @@ const WorkSpaceModal = () => {
         } else {
             toast.error(res.error);
         }
-
+        setSuggestion([]);
+        setUsername("");
         handleCloseForm();
     }
 
@@ -98,7 +101,7 @@ const WorkSpaceModal = () => {
 
                     <div className="flex gap-2">
                         <Button onClick={handleCloseForm} variant={"secondary"}>Cancel</Button>
-                        <Button disabled={isPending || isLoading || !username || suggestion.length > 0} onClick={handleClaimUsername}>Submit</Button>
+                        <Button disabled={isPending || isLoading || !username || suggestion.length > 0} onClick={handleClaimUsername}>Claim</Button>
                     </div>
                 </DialogFooter>
             </DialogContent>
