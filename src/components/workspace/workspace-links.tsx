@@ -20,7 +20,7 @@ const WorkspaceLinks = ({ workspace }: WorkspaceLinksProps) => {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="px-5 py-5 flex items-center flex flex-col justify-center gap-6">
+        <form onSubmit={handleSubmit} className="px-5 py-5 flex items-center flex-col justify-center gap-6">
             <div className="w-full px-1">
                 <h1 className="text-xl font-sans font-medium tracking-tight">Add Links</h1>
                 <p className="text-[12px] font-normal font-sans tracking-[-0.2px]">Add links to your plant for more visibiity</p>
