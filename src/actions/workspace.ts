@@ -3,6 +3,7 @@
 import { client } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { getDbUser } from "./auth";
+import { UpdateUserProfileProps } from "@/types";
 
 export const checkUsername = async (username: string) => {
     const user = await currentUser();
@@ -82,10 +83,10 @@ export const claimUsername = async (username: string) => {
     }
 }
 
-export const getUserByUsername = async(username: string) => {
+export const getUserByUsername = async (username: string) => {
     const user = await currentUser();
 
-    if(!user){
+    if (!user) {
         return {
             success: false,
             error: "unAuthenticated User!"
@@ -111,6 +112,41 @@ export const getUserByUsername = async(username: string) => {
         return {
             success: false,
             error: "failed to fetch User"
+        }
+    }
+}
+
+export const updateUserProfile = async ({ bio, firstName, lastName }: UpdateUserProfileProps) => {
+    const user = await currentUser();
+
+    if (!user) {
+        return {
+            success: false,
+            error: "User UnAuthenticated!"
+        }
+    }
+    try {
+        const data = {
+            firstName, lastName, bio
+        }
+        const update = await client.user.update({
+            where: {
+                clerkId: user.id
+            },
+            data: {
+                ...data
+            }
+        })
+
+        return {
+            success: true,
+            message: "User Updated Successfully"
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+        return {
+            success: false,
+            error: "failed to Update"
         }
     }
 }

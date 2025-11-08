@@ -18,6 +18,11 @@ interface ShareModalProps {
     setIsShare: () => void;
 }
 
+interface UserProfileModalProps {
+    isUserProfile: boolean;
+    setIsUserProfile: () => void;
+}
+
 export const useSelectUsernameWorkspace = create<SelectUsernameWorkspaceProps>()(persist(
     (set) => ({
         workspace: "",
@@ -39,3 +44,8 @@ export const useShareModal = create<ShareModalProps>()((set) => ({
     setIsShare: () => set((state) => ({ isShare: !state.isShare })),
     setActiveWorkspace: (workspace: string) => set({ activeWorkspace: workspace })
 }));
+
+export const useUserProfileModal = create<UserProfileModalProps>()((set) => ({
+    isUserProfile: false,
+    setIsUserProfile: () => set((state) => ({ isUserProfile: !state.isUserProfile }))
+}))

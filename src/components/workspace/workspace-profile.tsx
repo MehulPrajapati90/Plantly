@@ -6,14 +6,20 @@ import Image from "next/image";
 import Hint from "../ui/hint";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
+import { usePathname, useRouter } from "next/navigation";
+import { useShareModal, useUserProfileModal } from "@/store/workspace";
 
 interface WorkspaceProfileProps {
     workspace: string
 }
 
 const WorkspaceProfile = ({ workspace }: WorkspaceProfileProps) => {
+    const router = useRouter();
+    const pathname = usePathname();
     const { data, isPending } = useGetUserByUsername(workspace);
+    const { setIsShare, setActiveWorkspace } = useShareModal();
     const profilePhoto = data?.user?.imageUrl;
+    const { setIsUserProfile } = useUserProfileModal();
 
     if (isPending) {
         return (
@@ -21,7 +27,19 @@ const WorkspaceProfile = ({ workspace }: WorkspaceProfileProps) => {
         )
     }
 
-    console.log(profilePhoto)
+    const handlePreview = () => {
+        router.push(`/${workspace}`);
+    }
+
+    const handleShare = () => {
+        setActiveWorkspace(workspace);
+        setIsShare();
+    }
+
+    const handleUpdateUserProfile = () => {
+        setIsUserProfile();
+    }
+
     return (
         <div className="p-5 flex items-center">
             <div className="flex items-center gap-2">
@@ -40,7 +58,7 @@ const WorkspaceProfile = ({ workspace }: WorkspaceProfileProps) => {
                     </div>
 
                     <Hint label="Update profile">
-                        <div>
+                        <div onClick={handleUpdateUserProfile}>
                             <Pen size={16} className="text-zinc-400 mb-3.5" />
                         </div>
                     </Hint>
@@ -53,7 +71,7 @@ const WorkspaceProfile = ({ workspace }: WorkspaceProfileProps) => {
 
             <div className="flex justify-center items-center gap-1">
                 <Hint label="Share" asChild>
-                    <Button className="bg-transparent hover:bg-zinc-700 text-zinc-400 hover:text-white">
+                    <Button onClick={handleShare} className="bg-transparent hover:bg-zinc-700 text-zinc-400 hover:text-white">
                         <Share2 size={18} />
                     </Button>
                 </Hint>
@@ -68,12 +86,12 @@ const WorkspaceProfile = ({ workspace }: WorkspaceProfileProps) => {
                     </Button>
                 </Hint>
                 <Hint label="Home" asChild>
-                    <Button className="bg-transparent hover:bg-zinc-700 text-zinc-400 hover:text-white">
+                    <Button onClick={() => router.push('/')} className="bg-transparent hover:bg-zinc-700 text-zinc-400 hover:text-white">
                         <HomeIcon size={18} />
                     </Button>
                 </Hint>
                 <Hint label="Preview" asChild>
-                    <Button className="bg-transparent hover:bg-zinc-700 text-zinc-400 hover:text-white">
+                    <Button onClick={handlePreview} className="bg-transparent hover:bg-zinc-700 text-zinc-400 hover:text-white">
                         <Eye size={18} />
                     </Button>
                 </Hint>
