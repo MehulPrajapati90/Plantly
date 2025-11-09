@@ -23,6 +23,11 @@ interface UserProfileModalProps {
     setIsUserProfile: () => void;
 }
 
+interface SocialLinksModalProps {
+    isSocialLinks: boolean;
+    setIsSocialLinks: () => void;
+}
+
 export const useSelectUsernameWorkspace = create<SelectUsernameWorkspaceProps>()(persist(
     (set) => ({
         workspace: "",
@@ -48,4 +53,9 @@ export const useShareModal = create<ShareModalProps>()((set) => ({
 export const useUserProfileModal = create<UserProfileModalProps>()((set) => ({
     isUserProfile: false,
     setIsUserProfile: () => set((state) => ({ isUserProfile: !state.isUserProfile }))
+}))
+
+export const useSocialLinksModal = create<SocialLinksModalProps>()((set) => ({
+    isSocialLinks: false,
+    setIsSocialLinks: () => set((state) => ({ isSocialLinks: !state.isSocialLinks }))
 }))

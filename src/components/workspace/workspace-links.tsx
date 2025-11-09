@@ -5,18 +5,39 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
+import { useCreateLinks } from "@/hooks/workspace";
+import { toast } from "sonner";
 
 interface WorkspaceLinksProps {
     workspace: string
 }
 
 const WorkspaceLinks = ({ workspace }: WorkspaceLinksProps) => {
+    const { mutateAsync, isPending } = useCreateLinks();
     const [title, setTitle] = useState<string>("");
     const [description, setDespription] = useState<string>("");
     const [url, setUrl] = useState<string>("");
+    const [profileImageUrl, setProfileImageUrl] = useState<string>("");
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
 
+        const data = {
+            title, description, url, profileImageUrl, username: workspace
+        }
+
+        const response = await mutateAsync(data);
+
+        if (response.success) {
+            toast.success(response.message);
+        } else {
+            toast.error(response.error);
+        }
+
+        setTitle("");
+        setDespription("");
+        setProfileImageUrl("");
+        setUrl("");
     }
 
     return (
@@ -56,7 +77,7 @@ const WorkspaceLinks = ({ workspace }: WorkspaceLinksProps) => {
                         placeholder="http://x.com"
                         id="url"
                         type="url"
-                        value={title}
+                        value={url}
                         onChange={(e) => setUrl(e.target.value)}
                         className="accent-blue-500"
                     />
@@ -77,13 +98,16 @@ const WorkspaceLinks = ({ workspace }: WorkspaceLinksProps) => {
                         className="accent-blue-500"
                     />
                 </div>
-                <div className="w-full pt-1 flex justify-end px-1">
-                    <Button size={"sm"} className="font-sans font-medium" type="submit">
+                <div className="w-full pt-1 flex justify-between px-1">
+                    <div className="flex gap-2 justify-center items-center">
+                        <span className="text-[12px] font-sans font-medium p-1.5 bg-zinc-950 rounded-[5px] border border-[#313136]">Workspace :</span>
+                        <span className="text-[12px] font-sans font-medium rounded-[5px] hover:underline">{workspace}</span>
+                    </div>
+                    <Button size={"sm"} className="font-sans font-medium" type="submit" disabled={isPending}>
                         Create
                     </Button>
                 </div>
             </div>
-
         </form>
     )
 }

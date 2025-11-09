@@ -1,5 +1,5 @@
-import { checkUsername, claimUsername, getUserByUsername, updateUserProfile } from "@/actions/workspace";
-import { UpdateUserProfileProps } from "@/types";
+import { checkUsername, claimUsername, createLink, createSocialLinks, getProfileData, getUserByUsername, updateUserProfile } from "@/actions/workspace";
+import { CreateLinkProps, CreateSocialLinksProps, UpdateUserProfileProps } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useCheckUsername = () => {
@@ -31,9 +31,36 @@ export const useGetUserByUsername = (username: string) => {
 export const useUpdateUserProfile = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async(data: UpdateUserProfileProps) => await updateUserProfile(data),
+        mutationFn: async (data: UpdateUserProfileProps) => await updateUserProfile(data),
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['user']});
+            queryClient.invalidateQueries({ queryKey: ['user'] });
+        }
+    })
+}
+
+export const useCreateLinks = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (data: CreateLinkProps) => await createLink(data),
+        onSuccess: () => [
+            queryClient.invalidateQueries({ queryKey: ['links'] })
+        ]
+    })
+}
+
+export const useGetProfileData = (workspace: string) => {
+    return useQuery({
+        queryKey: ['user', 'links', 'social'],
+        queryFn: async () => await getProfileData(workspace)
+    })
+}
+
+export const useCreateSocialLinks = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (data: CreateSocialLinksProps) => await createSocialLinks(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['social'] })
         }
     })
 }

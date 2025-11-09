@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import Preview from "@/components/workspace/preview";
 import ShareButton from "@/components/workspace/share-button";
 import ShareModal from "@/components/workspace/share-modal";
+import SocialLinkModal from "@/components/workspace/social-link-modal";
 import UserProfileModal from "@/components/workspace/user-profile-modal";
 import WorkspaceDropDownBg from "@/components/workspace/workspace-dropdown-bg";
 import WorkspaceLinks from "@/components/workspace/workspace-links";
@@ -53,17 +55,17 @@ const Workspace = async ({ params }: WorkspaceProps) => {
               <WorkspaceLinks workspace={username} />
             </div>
           </div>
-          {/* <div className="min-h-auto hidden md:flex">
-            <Separator orientation="vertical" className=""/>
-          </div> */}
-          <div className="w-full md:w-[50%] min-h-auto bg-zinc-900 hidden md:flex">
-            {/* <WorkspaceProfile workspace={username} /> */}
+
+          {/* Preview */}
+          <div className="w-full md:w-[50%] max-h-140 bg-zinc-900 rounded-[30px] border border-dashed border-zinc-500 hidden md:flex min-h-130">
+            <Preview workspace={username} />
           </div>
         </div>
       </div>
       <WorkSpaceModal />
       <ShareModal />
       <UserProfileModal username={username} />
+      <SocialLinkModal username={username} />
     </div>
   )
 }

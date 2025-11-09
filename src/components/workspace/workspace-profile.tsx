@@ -7,7 +7,7 @@ import Hint from "../ui/hint";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import { usePathname, useRouter } from "next/navigation";
-import { useShareModal, useUserProfileModal } from "@/store/workspace";
+import { useShareModal, useSocialLinksModal, useUserProfileModal } from "@/store/workspace";
 
 interface WorkspaceProfileProps {
     workspace: string
@@ -17,13 +17,14 @@ const WorkspaceProfile = ({ workspace }: WorkspaceProfileProps) => {
     const router = useRouter();
     const pathname = usePathname();
     const { data, isPending } = useGetUserByUsername(workspace);
+    const { setIsSocialLinks } = useSocialLinksModal();
     const { setIsShare, setActiveWorkspace } = useShareModal();
     const profilePhoto = data?.user?.imageUrl;
     const { setIsUserProfile } = useUserProfileModal();
 
     if (isPending) {
         return (
-            <div>Loading...</div>
+            <div className="p-10 flex justify-center items-center">Loading...</div>
         )
     }
 
@@ -38,6 +39,10 @@ const WorkspaceProfile = ({ workspace }: WorkspaceProfileProps) => {
 
     const handleUpdateUserProfile = () => {
         setIsUserProfile();
+    }
+
+    const handleSocialLinks = () => {
+        setIsSocialLinks();
     }
 
     return (
@@ -76,7 +81,7 @@ const WorkspaceProfile = ({ workspace }: WorkspaceProfileProps) => {
                     </Button>
                 </Hint>
                 <Hint label="social links" asChild>
-                    <Button className="bg-transparent hover:bg-zinc-700 text-zinc-400 hover:text-white">
+                    <Button onClick={handleSocialLinks} className="bg-transparent hover:bg-zinc-700 text-zinc-400 hover:text-white">
                         <Instagram size={18} />
                     </Button>
                 </Hint>
