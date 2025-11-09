@@ -3,6 +3,7 @@
 import { client } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { getDbUser } from "./auth";
+import { CreateLinkProps, CreateSocialLinksProps, UpdateUserProfileProps } from "@/types";
 
 export const checkUsername = async (username: string) => {
     const user = await currentUser();
@@ -78,6 +79,216 @@ export const claimUsername = async (username: string) => {
         return {
             success: false,
             error: "failed to claim username"
+        }
+    }
+}
+
+export const getUserByUsername = async (username: string) => {
+    const user = await currentUser();
+
+    if (!user) {
+        return {
+            success: false,
+            error: "unAuthenticated User!"
+        }
+    }
+    try {
+        const response = await client.username.findUnique({
+            where: {
+                username: username
+            },
+            include: {
+                user: true,
+            }
+        })
+
+        return {
+            success: true,
+            user: response?.user,
+            message: "User fetched successfully"
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+        return {
+            success: false,
+            error: "failed to fetch User"
+        }
+    }
+}
+
+export const updateUserProfile = async ({ bio, firstName, lastName }: UpdateUserProfileProps) => {
+    const user = await currentUser();
+
+    if (!user) {
+        return {
+            success: false,
+            error: "User UnAuthenticated!"
+        }
+    }
+    try {
+        const data = {
+            firstName, lastName, bio
+        }
+        const update = await client.user.update({
+            where: {
+                clerkId: user.id
+            },
+            data: {
+                ...data
+            }
+        })
+
+        return {
+            success: true,
+            message: "User Updated Successfully"
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+        return {
+            success: false,
+            error: "failed to Update"
+        }
+    }
+}
+
+export const createLink = async ({ description, title, url, profileImageUrl, username }: CreateLinkProps) => {
+    const { user } = await getDbUser();
+
+    if (!user) {
+        return {
+            success: false,
+            error: "User UnAuthenticated!"
+        }
+    }
+    try {
+        const workspace = await client.username.findUnique({
+            where: {
+                username: username
+            }
+        })
+
+        const profileImage = profileImageUrl ? profileImageUrl : (await fetch(`https://ui-avatars.com/api/?background=random&name=${title}`).then(res => res.url));
+
+        const create = await client.link.create({
+            data: {
+                userId: user?.id,
+                workspaceId: workspace?.id!,
+                title: title,
+                url: url,
+                description: description,
+                profileImageUrl: profileImage,
+            }
+        })
+
+        return {
+            success: true,
+            message: "Link Created Successfully!"
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+        return {
+            success: false,
+            error: "failed to Create"
+        }
+    }
+}
+
+export const getWorkspaceByName = async (workspace: string) => {
+    try {
+        const currentWorkspace = await client.username.findUnique({
+            where: {
+                username: workspace
+            },
+        })
+
+        return {
+            workspace: currentWorkspace
+        };
+    } catch (e) {
+        console.log("Error: ", e);
+        return {
+            success: false,
+            error: "failed to fetch"
+        }
+    }
+}
+
+export const getProfileData = async (workspace: string) => {
+    const { user } = await getUserByUsername(workspace);
+    const currentWorkspace = await getWorkspaceByName(workspace);
+    try {
+        const data = await client.user.findFirst({
+            where: {
+                id: user?.id,
+            },
+            include: {
+                link: {
+                    where: {
+                        workspaceId: currentWorkspace.workspace?.id,
+                        userId: user?.id
+                    },
+                    select: {
+                        title: true,
+                        description: true,
+                        profileImageUrl: true,
+                        url: true,
+                    }
+                },
+                socialLink: {
+                    where: {
+                        workspaceId: currentWorkspace.workspace?.id,
+                        userId: user?.id
+                    },
+                    select: {
+                        platform: true,
+                        url: true,
+                    }
+                },
+            },
+        });
+
+        return {
+            success: true,
+            profileData: data,
+            message: "Fetched Successfully!"
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+        return {
+            success: false,
+            error: "failed to fetch"
+        }
+    }
+}
+
+
+export const createSocialLinks = async ({ platform, url, username }: CreateSocialLinksProps) => {
+    const { user } = await getDbUser();
+    try {
+        const workspace = await client.username.findUnique({
+            where: {
+                username: username
+            }
+        })
+
+        const createSocial = await client.socialLink.create({
+            data: {
+                userId: user?.id!,
+                workspaceId: workspace?.id!,
+                url: url,
+                platform: platform
+            }
+        })
+
+        return {
+            success: true,
+            message: "Create Social Links"
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+        return {
+            success: false,
+            error: "failed to Create"
         }
     }
 }

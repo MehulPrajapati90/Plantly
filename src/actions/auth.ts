@@ -95,7 +95,7 @@ export const getUsernamesOfUser = async () => {
                 userId: user?.id
             },
             orderBy: {
-                createdAt: "asc"
+                createdAt: "desc"
             },
         })
 

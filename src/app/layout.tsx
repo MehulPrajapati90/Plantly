@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
-import { dark } from '@clerk/themes'
+import { neobrutalism, } from '@clerk/themes'
 import { ThemeProvider } from "@/components/theme-provider";
 import QueryProvider from "@/components/query-client";
 import { Toaster } from "sonner";
@@ -33,7 +33,17 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ClerkProvider appearance={{
-          theme: [dark],
+          variables: {
+            colorPrimary: "#DB2777",          // Tailwind pink-600 (vibrant primary)
+            colorBackground: "#FABCAC",   // Let gradient show through
+            colorText: "#A3004C",             // Deep navy (contrast on light pinks)
+            colorInputBackground: "rgba(255,255,255,0.6)", // Frosted glass input
+            colorInputText: "#1A2A4F",
+            colorDanger: "#E11D48",           // Strong rose red for errors
+            colorSuccess: "#FBCFE8",          // Soft pink success (gentle tone)
+          },
+
+          theme: [neobrutalism],
         }}>
           <QueryProvider>
             <ThemeProvider
@@ -43,7 +53,7 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               {children}
-              <Toaster position="bottom-right"/>
+              <Toaster position="bottom-right" />
             </ThemeProvider>
           </QueryProvider>
         </ClerkProvider>

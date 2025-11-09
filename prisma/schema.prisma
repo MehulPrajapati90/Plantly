@@ -34,6 +34,9 @@ model Username {
   userId   String
   user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  link        Link[]
+  socialLinks SocialLink[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -41,13 +44,16 @@ model Username {
 model Link {
   id String @id @default(cuid())
 
-  title       String
-  url         String
-  description String? @db.VarChar(500)
-  clickCount  Int     @default(0)
+  title           String
+  url             String
+  description     String? @db.VarChar(500)
+  clickCount      Int     @default(0)
+  profileImageUrl String?
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  workspaceId String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Username @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -57,9 +63,11 @@ model SocialLink {
   id       String @id @default(cuid())
   platform String
   url      String
-  userId   String
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  workspaceId String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Username @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
