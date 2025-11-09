@@ -34,6 +34,7 @@ export const useUpdateUserProfile = () => {
         mutationFn: async (data: UpdateUserProfileProps) => await updateUserProfile(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['user'] });
+            queryClient.invalidateQueries({ queryKey: ['user-social-links'] });
         }
     })
 }
@@ -42,15 +43,16 @@ export const useCreateLinks = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (data: CreateLinkProps) => await createLink(data),
-        onSuccess: () => [
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['links'] })
-        ]
+            queryClient.invalidateQueries({ queryKey: ['user-social-links'] })
+        }
     })
 }
 
 export const useGetProfileData = (workspace: string) => {
     return useQuery({
-        queryKey: ['user', 'links', 'social'],
+        queryKey: ['user-social-links'],
         queryFn: async () => await getProfileData(workspace)
     })
 }
@@ -61,6 +63,7 @@ export const useCreateSocialLinks = () => {
         mutationFn: async (data: CreateSocialLinksProps) => await createSocialLinks(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['social'] })
+            queryClient.invalidateQueries({ queryKey: ['user-social-links'] })
         }
     })
 }

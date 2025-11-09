@@ -11,12 +11,12 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
-import { useState, useEffect, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 import { useSocialLinksModal } from "@/store/workspace";
-import { Instagram, Linkedin, Mail, Twitch, Twitter, Youtube } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { useCreateSocialLinks } from "@/hooks/workspace";
 import { toast } from "sonner";
+import { socialPlatforms } from "@/utils";
 
 interface SocialLinksModalProps {
     username: string;
@@ -48,15 +48,6 @@ const SocialLinkModal = ({ username }: SocialLinksModalProps) => {
 
         setIsSocialLinks();
     }
-
-    const socialPlatforms = [
-        { value: "instagram", label: "Instagram", icon: Instagram },
-        { value: "youtube", label: "YouTube", icon: Youtube },
-        { value: "email", label: "Email", icon: Mail },
-        { value: "Twitter", label: "Twitter", icon: Twitter },
-        { value: "Twitch", label: "Twitch", icon: Twitch },
-        { value: "Linkedin", label: "Linkedin", icon: Linkedin },
-    ]
 
     return (
         <Dialog open={isSocialLinks} onOpenChange={handleCloseForm}>
