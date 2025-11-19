@@ -1,6 +1,8 @@
+import { getDbUser } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Preview from "@/components/workspace/preview";
+import ProfileImageModal from "@/components/workspace/profile-image-modal";
 import ShareButton from "@/components/workspace/share-button";
 import ShareModal from "@/components/workspace/share-modal";
 import SocialLinkModal from "@/components/workspace/social-link-modal";
@@ -66,6 +68,7 @@ const Workspace = async ({ params }: WorkspaceProps) => {
       <ShareModal />
       <UserProfileModal username={username} />
       <SocialLinkModal username={username} />
+      <ProfileImageModal username={username} />
     </div>
   )
 }

@@ -16,7 +16,7 @@ export const ourFileRouter = {
     })
         .middleware(async () => {
             const user = await currentUser();
-
+            if (!user) throw new UploadThingError("Unauthorized");
             return { user: user }
         })
         .onUploadComplete(async ({ metadata, file }) => {
@@ -43,7 +43,7 @@ export const ourFileRouter = {
         }))
         .middleware(async ({ input }) => {
             const user = await currentUser();
-
+            if (!user) throw new UploadThingError("Unauthorized");
             return { user: user, id: input?.id };
         })
         .onUploadComplete(async ({ metadata, file }) => {
@@ -56,4 +56,3 @@ export const ourFileRouter = {
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
-export type UploadLinkUploader = typeof ourFileRouter;
