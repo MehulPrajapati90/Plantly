@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
 
   images: {
-    domains: ['img.clerk.com', 'images.pexels.com', 'ui-avatars.com']
+    domains: ['img.clerk.com', 'images.pexels.com', 'ui-avatars.com', 'utfs.io']
   }
 };
 

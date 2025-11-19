@@ -1,6 +1,6 @@
 "use server";
 
-import { client } from "@/lib/db";
+import client from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { getDbUser } from "./auth";
 import { CreateLinkProps, CreateSocialLinksProps, UpdateUserProfileProps } from "@/types";
@@ -289,6 +289,56 @@ export const createSocialLinks = async ({ platform, url, username }: CreateSocia
         return {
             success: false,
             error: "failed to Create"
+        }
+    }
+}
+
+export const addProfileImage = async (image: string) => {
+    const user = await currentUser();
+    try {
+        const updateUser = await client.user.update({
+            where: {
+                clerkId: user?.id
+            },
+            data: {
+                imageUrl: image
+            }
+        })
+
+        return {
+            success: true,
+            message: "Updated user profile successfully"
+        }
+    } catch (e) {
+        console.log(e);
+        return {
+            success: false,
+            message: "failed to add profile image"
+        }
+    }
+}
+
+export const removeProfileImage = async () => {
+    const user = await currentUser();
+    try {
+        const updateUser = await client.user.update({
+            where: {
+                clerkId: user?.id
+            },
+            data: {
+                imageUrl: null
+            }
+        })
+
+        return {
+            success: true,
+            message: "Updated user profile successfully"
+        }
+    } catch (e) {
+        console.log(e);
+        return {
+            success: false,
+            message: "failed to add profile image"
         }
     }
 }

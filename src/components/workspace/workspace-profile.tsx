@@ -7,7 +7,7 @@ import Hint from "../ui/hint";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import { usePathname, useRouter } from "next/navigation";
-import { useShareModal, useSocialLinksModal, useUserProfileModal } from "@/store/workspace";
+import { useProfileImageModal, useShareModal, useSocialLinksModal, useUserProfileModal } from "@/store/workspace";
 
 interface WorkspaceProfileProps {
     workspace: string
@@ -16,6 +16,7 @@ interface WorkspaceProfileProps {
 const WorkspaceProfile = ({ workspace }: WorkspaceProfileProps) => {
     const router = useRouter();
     const pathname = usePathname();
+    const { setIsProfile } = useProfileImageModal();
     const { data, isPending } = useGetUserByUsername(workspace);
     const { setIsSocialLinks } = useSocialLinksModal();
     const { setIsShare, setActiveWorkspace } = useShareModal();
@@ -51,7 +52,7 @@ const WorkspaceProfile = ({ workspace }: WorkspaceProfileProps) => {
                 <Hint label="profile image" align="center">
                     <div className="flex justify-center items-center bg-white w-17 h-17 rounded-full relative">
                         <Image height={5} width={5} unoptimized src={`${profilePhoto}`} alt="profile-logo" className="h-15 w-15 rounded-full" />
-                        <div className="absolute bottom-0 right-0">
+                        <div onClick={setIsProfile} className="absolute bottom-0 right-0">
                             <Plus size={20} className="bg-slate-900 text-red-100 rounded-full border border-white hover:bg-slate-700 transition-all ease-in-out duration-200" />
                         </div>
                     </div>

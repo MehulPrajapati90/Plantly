@@ -28,6 +28,11 @@ interface SocialLinksModalProps {
     setIsSocialLinks: () => void;
 }
 
+interface ProfileImageProps {
+    isProfile: boolean;
+    setIsProfile: () => void;
+}
+
 export const useSelectUsernameWorkspace = create<SelectUsernameWorkspaceProps>()(persist(
     (set) => ({
         workspace: "",
@@ -58,4 +63,9 @@ export const useUserProfileModal = create<UserProfileModalProps>()((set) => ({
 export const useSocialLinksModal = create<SocialLinksModalProps>()((set) => ({
     isSocialLinks: false,
     setIsSocialLinks: () => set((state) => ({ isSocialLinks: !state.isSocialLinks }))
+}))
+
+export const useProfileImageModal = create<ProfileImageProps>()((set) => ({
+    isProfile: false,
+    setIsProfile: () => set((state) => ({ isProfile: !state.isProfile }))
 }))

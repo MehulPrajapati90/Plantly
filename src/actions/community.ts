@@ -1,6 +1,6 @@
 "use server";
 
-import { client } from "@/lib/db";
+import client from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 
 export const updateUserToCommunity = async () => {
