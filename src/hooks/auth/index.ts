@@ -1,4 +1,4 @@
-import { getUsernamesOfUser, onBoardUser } from "@/actions/auth";
+import { getDbUser, getUsernamesOfUser, onBoardUser } from "@/actions/auth";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useOnboardUser = () => {
@@ -15,5 +15,12 @@ export const useGetUsernames = () => {
     return useQuery({
         queryKey: ['username'],
         queryFn: async () => await getUsernamesOfUser()
+    })
+}
+
+export const useGetDBUser = () => {
+    return useQuery({
+        queryKey: ['user'],
+        queryFn: async () => await getDbUser()
     })
 }
