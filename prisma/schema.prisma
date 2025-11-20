@@ -87,10 +87,3 @@ model CommunityStar {
   @@index([followerId])
   @@index([followingId])
 }
-
-model Test {
-  id        String   @id @default(cuid())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}

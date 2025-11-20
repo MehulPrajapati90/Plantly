@@ -11,9 +11,10 @@ import { useUser } from "@clerk/nextjs";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
+    const router = useRouter();
     const isSignedInUser = useUser()?.isSignedIn;
     const { theme } = useTheme();
     return (
@@ -33,7 +34,9 @@ const Navbar = () => {
                         </Link>
                         <div className="font-normal text-[13px] dark:text-[#f3f3f3] text-[#101114] font-sans flex justify-center items-center gap-3 pl-8">
                             <p>docs</p>
-                            <p>community</p>
+                            <p onClick={() => {
+                                router.push('/community')
+                            }} className="cursor-pointer">community</p>
                         </div>
                     </div>
 

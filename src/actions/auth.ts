@@ -6,6 +6,7 @@ import { currentUser } from "@clerk/nextjs/server";
 export const onBoardUser = async () => {
     try {
         const user = await currentUser();
+        const dbUser = await getDbUser();
 
         if (!user) {
             return {
@@ -23,7 +24,7 @@ export const onBoardUser = async () => {
             update: {
                 firstName: firstName || null,
                 lastName: lastName || null,
-                imageUrl: imageUrl || null,
+                imageUrl: imageUrl === dbUser?.user?.imageUrl ? imageUrl : dbUser?.user?.imageUrl,
                 email: emailAddresses[0]?.emailAddress || "",
             },
             create: {
@@ -59,6 +60,13 @@ export const onBoardUser = async () => {
 
 export const getDbUser = async () => {
     const user = await currentUser();
+
+    if(!user) {
+        return {
+            success: false,
+            message: "User UnAuthenticated"
+        }
+    }
     try {
         const DBuser = await client.user.findUnique({
             where: {
