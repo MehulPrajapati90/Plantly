@@ -8,7 +8,7 @@ import { useGetCommunityPeopleBySearchTerm } from "@/hooks/community";
 import { useSearchState } from "@/store/community";
 import { ArrowDown } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 
 const SearchPage = () => {
     const { isSearchQuery, setIsSearchQuery } = useSearchState();
@@ -36,6 +36,7 @@ const SearchPage = () => {
             <div className="w-full flex flex-col gap-2">
                 <div className="flex justify-between w-full">
                     <h1 className="text-4xl font-medium">Search Results...</h1>
+
                     <SearchBar />
                 </div>
                 <div className="font-mono text-[12px] leading-4 flex justify-between w-full text-zinc-400">

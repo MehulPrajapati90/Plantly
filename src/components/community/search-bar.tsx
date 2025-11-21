@@ -9,8 +9,8 @@ import { useSearchState } from "@/store/community";
 
 const SearchBar = () => {
     const router = useRouter();
-    const pathname = usePathname();
     const { setIsSearchQuery } = useSearchState();
+    const pathname = usePathname();
     const [value, setValue] = useState<string>("");
     const inputRef = useRef<HTMLInputElement | null>(null);
 
