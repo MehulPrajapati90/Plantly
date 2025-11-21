@@ -8,6 +8,39 @@ import { useGetDBUser } from "@/hooks/auth";
 import { useCommunityPeople } from "@/hooks/community";
 import { ArrowDown } from "lucide-react";
 
+type ProfileCardsTypes = {
+    link: {
+        createdAt: Date;
+        title: string;
+        url: string;
+        description: string | null;
+        clickCount: number;
+        profileImageUrl: string | null;
+    }[];
+    user: {
+        id: string;
+        isCommunity: boolean;
+        firstName: string | null;
+        lastName: string | null;
+        imageUrl: string | null;
+        bio: string | null;
+        createdAt: Date;
+        username: { username: string }[];
+        following: { follower: { id: string } }[];
+    };
+    socialLinks: {
+        createdAt: Date;
+        url: string;
+        platform: string;
+    }[];
+} & {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    userId: string;
+    username: string;
+};
+
 const CommunityPage = () => {
     const { data, isPending } = useCommunityPeople();
     const { data: userData, isPending: isUserPending } = useGetDBUser();
@@ -69,7 +102,7 @@ const CommunityPage = () => {
             {/* Scrollable List */}
             <div className="h-auto overflow-auto hidden-scrollbar">
                 <div className="w-full h-auto flex flex-col gap-3.5">
-                    {data?.community?.map((val, idx) => (
+                    {data?.community?.map((val: ProfileCardsTypes, idx) => (
                         <ProfileCards
                             following={val.user.following}
                             key={idx}
