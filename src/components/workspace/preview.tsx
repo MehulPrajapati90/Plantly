@@ -89,7 +89,7 @@ const Preview = ({ workspace }: PreviewProps) => {
                     </div>
 
                     <div className="pt-10 flex gap-3">
-                        {data?.profileData?.socialLink?.map(({ platform, url }, idx) => {
+                        {data?.profileData?.socialLink?.map(({ platform, url }: { platform: string; url: string }, idx) => {
                             const matched = socialPlatforms.find(
                                 (p) => p.value.toLowerCase() === platform.toLowerCase()
                             );
@@ -112,7 +112,7 @@ const Preview = ({ workspace }: PreviewProps) => {
                     </div>
 
                     <div className="w-full px-5 pt-8 pb-6 flex flex-col justify-center gap-3">
-                        {data?.profileData?.link.map(({ description, profileImageUrl, title, url }, idx) => (
+                        {data?.profileData?.link.map(({ description, profileImageUrl, title, url }: { description: string | null; profileImageUrl: string | null; title: string; url: string }, idx) => (
                             <Link href={url} key={idx} target="_blank" className="w-full flex justify-center items-center relative bg-white h-11 rounded-[8px]">
                                 <Image src={`${profileImageUrl}`} unoptimized height={20} width={20} alt="link profile" className="w-9 h-9 rounded-full absolute left-3" />
                                 <span className="text-zinc-900 font-sans font-medium tracking-tight text-[16px]">{title}</span>
@@ -121,7 +121,7 @@ const Preview = ({ workspace }: PreviewProps) => {
                     </div>
 
                     <div className="px-20 w-full">
-                        <Separator className="w-full bg-white/20"/>
+                        <Separator className="w-full bg-white/20" />
                     </div>
 
                     <div className="w-full min-h-10 flex justify-between items-center px-5">

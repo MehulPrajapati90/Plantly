@@ -1,7 +1,0 @@
-{
-  "build": {
-    "env": {
-      "NEXT_STRICT_ESLINT": "false"
-    }
-  }
-}
