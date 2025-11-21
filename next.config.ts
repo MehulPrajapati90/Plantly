@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
 
   images: {
     domains: ['img.clerk.com', 'images.pexels.com', 'ui-avatars.com', 'utfs.io']
-  }
+  },
 };
 
 export default nextConfig;
