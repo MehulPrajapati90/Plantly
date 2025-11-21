@@ -1,4 +1,6 @@
-import React from 'react'
+"use client";
+
+import React, { Suspense } from 'react'
 
 const CommunityLayout = ({ children }: { children: React.ReactNode }
 ) => {
@@ -10,7 +12,9 @@ const CommunityLayout = ({ children }: { children: React.ReactNode }
                     <div className='w-full border-b h-40  md:block hidden'>
 
                     </div>
-                    {children}
+                    <Suspense fallback={<div>Loading...</div>}>
+                        {children}
+                    </Suspense>
                 </div>
                 <div className="h-40 border-b md:block hidden" />
             </div>
