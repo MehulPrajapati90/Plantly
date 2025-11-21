@@ -1,5 +1,6 @@
 "use client";
 
+import CommunityShareModal from "@/components/community/comunity-profile-share";
 import ProfileCards from "@/components/community/profile-cards";
 import SearchBar from "@/components/community/search-bar";
 import Hint from "@/components/ui/hint";
@@ -83,8 +84,8 @@ const CommunityPage = () => {
                 </div>
             </div>
 
+            <CommunityShareModal />
         </div>
-
     )
 }
 

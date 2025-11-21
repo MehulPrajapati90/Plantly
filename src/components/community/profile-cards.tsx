@@ -1,11 +1,13 @@
 "use client";
 
-import { Star } from "lucide-react";
+import { Share2, SquareArrowOutUpRight, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import Hint from "../ui/hint";
 import { useFollowCommunityUser, useGetAllFollowedUser, useUnfollowCommunityUser } from "@/hooks/community";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useCommunityShareModal } from "@/store/community";
 
 interface ProfileCardsProps {
     following?: {
@@ -24,6 +26,8 @@ interface ProfileCardsProps {
 
 const ProfileCards = ({ imageUrl, name, bio, username, createdAt, idx, userId, id, following }: ProfileCardsProps) => {
     // const { data, isPending } = useGetAllFollowedUser();
+    const router = useRouter();
+    const { setActiveCommunityProfile, setIsProfileShare } = useCommunityShareModal();
     const { mutateAsync: followMutateAsync, isPending: isFollowPending } = useFollowCommunityUser();
     const { mutateAsync: unfollowMutateAsync, isPending: isUnfollowPending } = useUnfollowCommunityUser();
 
@@ -41,14 +45,40 @@ const ProfileCards = ({ imageUrl, name, bio, username, createdAt, idx, userId, i
         }
     };
 
-    // console.log("Here: ", data)
+    const handleCommunityProfileShare = () => {
+        setIsProfileShare();
+        setActiveCommunityProfile(username);
+    };
+
+    const handleDisableFollowUserService = async () => {
+        toast.error("follow service is disabled currently.");
+    }
+
     return (
         <div key={idx} className="w-full h-20 bg-zinc-900 rounded-md border border-b-zinc-600 flex items-center gap-2 relative">
-            <button disabled={isFollowPending || userId === id} className="absolute top-2 right-2" onClick={() => handleFollowUser(username)}>
+            {/* <button disabled={isFollowPending || userId === id} className="absolute top-2 right-2" onClick={() => handleFollowUser(username)}>
                 <Hint asChild label={`Follow ${username}`} align="center" side="right">
                     <Star size={18} className={`text-yellow-400 ${(userId === id || isFollowing) && "fill-yellow-400"}`} />
                 </Hint>
-            </button>
+            </button> */}
+
+            <div className="flex items-center gap-3 absolute top-2 right-2">
+                <button onClick={() => router.push(`/${username}`)}>
+                    <Hint asChild label={`view ${username}'s profile`} align="center" side="right">
+                        <SquareArrowOutUpRight size={17} className="text-slate-300" />
+                    </Hint>
+                </button>
+                <button onClick={handleCommunityProfileShare}>
+                    <Hint asChild label={`Share ${username}'s profile`} align="center" side="right">
+                        <Share2 size={17} className="text-zinc-500" />
+                    </Hint>
+                </button>
+                <button onClick={handleDisableFollowUserService}>
+                    <Hint asChild label={`Follow ${username}`} align="center" side="right">
+                        <Star size={18} className={`text-yellow-400`} />
+                    </Hint>
+                </button>
+            </div>
             <Image src={imageUrl || "/default-profile.png"} alt={name} width={80} height={80} className="w-16 h-16 rounded-full object-cover m-2 inline-block align-middle" />
             <div className="w-full flex flex-col gap-1.5">
                 <div className="flex flex-col leading-3">
