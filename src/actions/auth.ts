@@ -95,6 +95,14 @@ export const getDbUser = async () => {
     }
 }
 
+interface ItemsUsernames {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    userId: string;
+    username: string;
+}
+
 export const getUsernamesOfUser = async () => {
     try {
         const { user } = await getDbUser();
@@ -114,7 +122,7 @@ export const getUsernamesOfUser = async () => {
             }
         }
 
-        const usernames = response.map((items) => (items.username));
+        const usernames = response.map((items: ItemsUsernames) => (items.username));
 
         return {
             success: true,
