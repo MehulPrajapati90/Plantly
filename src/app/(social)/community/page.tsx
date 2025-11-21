@@ -102,7 +102,7 @@ const CommunityPage = () => {
             {/* Scrollable List */}
             <div className="h-auto overflow-auto hidden-scrollbar">
                 <div className="w-full h-auto flex flex-col gap-3.5">
-                    {data?.community?.map((val: ProfileCardsTypes, idx) => (
+                    {data?.community?.map((val: ProfileCardsTypes, idx: number) => (
                         <ProfileCards
                             following={val.user.following}
                             key={idx}
