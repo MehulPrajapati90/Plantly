@@ -54,8 +54,8 @@ const ProfileImageModal = ({ username }: ProfileImageModalProps) => {
     }
 
     useEffect(() => {
-        setThumbnail(data?.user?.imageUrl);
-    }, [data?.user?.imageUrl]);
+        setThumbnail(data?.workspacedata?.user?.imageUrl);
+    }, [data?.workspacedata?.user?.imageUrl]);
 
     return (
         <Dialog open={isProfile} onOpenChange={handleCloseForm}>

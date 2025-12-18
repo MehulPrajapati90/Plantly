@@ -11,7 +11,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 interface WorkspaceDropDownProps {
     active: string;
-    workspaces: string[];
+    workspaces: (string | null)[];
     onSelect: (workspace: string) => void;
 }
 
@@ -40,7 +40,7 @@ const WorkspaceDropDown = ({
                 {workspaces.map((workspace) => (
                     <DropdownMenuItem
                         key={workspace}
-                        onClick={() => handleSelect(workspace)}
+                        onClick={() => handleSelect(workspace!)}
                         className={`capitalize ${workspace === active ? "font-semibold text-[#f3f3f3]" : ""
                             }`}
                     >
