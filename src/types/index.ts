@@ -17,3 +17,15 @@ export interface CreateSocialLinksProps {
     url: string;
     platform: string;
 }
+
+export interface CreateWorkspace {
+    username: string;
+    imageUrl: string;
+    profileName: string;
+}
+
+export interface UpdateWorkspaceProfile {
+    profileName: string;
+    imageUrl: string;
+    workspace: string;
+}

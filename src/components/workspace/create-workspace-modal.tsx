@@ -26,14 +26,6 @@ const CreateWorkspaceModal = () => {
     const [workspaceImage, setWorkspaceImage] = useState("");
     const [workpaceProfileName, setworkpaceProfileName] = useState("");
 
-    console.log(workspaceImage);
-
-    const handleCloseForm = () => {
-        setSuggestion([]);
-        setUsername("");
-        setIsWorkspace();
-    }
-
     const handleRemove = async () => {
         setWorkspaceImage("");
     }
@@ -66,7 +58,6 @@ const CreateWorkspaceModal = () => {
         }
         setSuggestion([]);
         setUsername("");
-        handleCloseForm();
     }
 
     useEffect(() => {
@@ -85,7 +76,7 @@ const CreateWorkspaceModal = () => {
     }, [username]);
 
     return (
-        <Dialog open={isWorkspace} onOpenChange={handleCloseForm}>
+        <Dialog open={true} >
             <DialogContent className='sm:max-w-[425px]'>
                 <DialogHeader>
                     <DialogTitle>Create new Workspace</DialogTitle>
@@ -179,7 +170,6 @@ const CreateWorkspaceModal = () => {
                     {!isPending && !isLoading && username && suggestion.length === 0 && (<CheckCheck className='absolute left-4 text-green-500' />)}
 
                     <div className="flex gap-2">
-                        <Button onClick={handleCloseForm} variant={"secondary"}>Cancel</Button>
                         <Button disabled={isPending || isLoading || !username || suggestion.length > 0 || !workpaceProfileName || !workspaceImage} onClick={handleClaimUsername}>Claim</Button>
                     </div>
                 </DialogFooter>

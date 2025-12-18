@@ -54,47 +54,40 @@ export const getAllCommunityUser = async () => {
                     isCommunity: true,
                 }
             },
-            include: {
+            select: {
+                // user: {
+                //     select: {
+                //         id: true,
+                //         bio: true,
+                //         firstName: true,
+                //         lastName: true,
+                //         createdAt: true,
+                //         imageUrl: true,
+                //         isCommunity: true,
+                //         username: {
+                //             select: {
+                //                 username: true
+                //             }
+                //         },
+                //         following: {
+                //             select: {
+                //                 follower: {
+                //                     select: {
+                //                         id: true
+                //                     }
+                //                 }
+                //             },
+                //         }
+                //     }
+                // },
+
+                imageUrl: true,
+                profileName: true,
+                username: true,
+                createdAt: true,
                 user: {
                     select: {
-                        id: true,
-                        bio: true,
-                        firstName: true,
-                        lastName: true,
-                        createdAt: true,
-                        imageUrl: true,
-                        isCommunity: true,
-                        username: {
-                            select: {
-                                username: true
-                            }
-                        },
-                        following: {
-                            select: {
-                                follower: {
-                                    select: {
-                                        id: true
-                                    }
-                                }
-                            },
-                        }
-                    }
-                },
-                link: {
-                    select: {
-                        url: true,
-                        title: true,
-                        profileImageUrl: true,
-                        description: true,
-                        clickCount: true,
-                        createdAt: true
-                    }
-                },
-                socialLinks: {
-                    select: {
-                        url: true,
-                        platform: true,
-                        createdAt: true
+                        bio: true
                     }
                 }
             },

@@ -3,7 +3,7 @@
 import client from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { getDbUser } from "./auth";
-import { CreateLinkProps, CreateSocialLinksProps, UpdateUserProfileProps } from "@/types";
+import { CreateLinkProps, CreateSocialLinksProps, CreateWorkspace, UpdateUserProfileProps, UpdateWorkspaceProfile } from "@/types";
 
 export const checkUsername = async (username: string) => {
     const user = await currentUser();
@@ -60,18 +60,21 @@ export const getSuggestion = async (base: string, count = 3, maxTries = 10) => {
     return suggestions;
 }
 
-export const claimUsername = async (username: string) => {
+export const claimUsername = async ({ imageUrl, profileName, username }: CreateWorkspace) => {
     const { user } = await getDbUser();
     try {
         const claim = await client.username.create({
             data: {
                 userId: user?.id!,
+                imageUrl: imageUrl,
+                profileName: profileName,
                 username: username!
             }
         })
 
         return {
             success: true,
+            username: claim?.username,
             message: "Claimed Successfully!"
         }
     } catch (e) {
@@ -84,7 +87,7 @@ export const claimUsername = async (username: string) => {
 }
 
 export const getUserByUsername = async (username: string) => {
-    const user = await currentUser();
+    const { user } = await getDbUser();
 
     if (!user) {
         return {
@@ -95,16 +98,95 @@ export const getUserByUsername = async (username: string) => {
     try {
         const response = await client.username.findUnique({
             where: {
-                username: username
+                username: username,
+                userId: user.id,
             },
-            include: {
-                user: true,
+            select: {
+                user: {
+                    select: {
+                        id: true,
+                        bio: true,
+                        firstName: true,
+                        lastName: true,
+                        imageUrl: true,
+                    }
+                },
+                profileName: true,
+                imageUrl: true,
+                username: true,
+                socialLinks: {
+                    select: {
+                        platform: true,
+                        url: true,
+                    }
+                },
+                link: {
+                    select: {
+                        title: true,
+                        description: true,
+                        profileImageUrl: true,
+                        clickCount: true,
+                        url: true,
+                    }
+                }
             }
         })
 
         return {
             success: true,
-            user: response?.user,
+            workspacedata: response,
+            message: "User fetched successfully"
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+        return {
+            success: false,
+            error: "failed to fetch User"
+        }
+    }
+}
+
+export const getUserByUsernameforPreview = async (username: string) => {
+
+    try {
+        const response = await client.username.findUnique({
+            where: {
+                username: username,
+            },
+            select: {
+                user: {
+                    select: {
+                        id: true,
+                        bio: true,
+                        firstName: true,
+                        lastName: true,
+                        imageUrl: true,
+                    }
+                },
+                profileName: true,
+                imageUrl: true,
+                username: true,
+                socialLinks: {
+                    select: {
+                        platform: true,
+                        url: true,
+                    }
+                },
+                link: {
+                    select: {
+                        title: true,
+                        description: true,
+                        profileImageUrl: true,
+                        clickCount: true,
+                        url: true,
+                    }
+                }
+            }
+        })
+
+        return {
+            success: true,
+            workspacedata: response,
             message: "User fetched successfully"
         }
     } catch (e) {
@@ -214,18 +296,18 @@ export const getWorkspaceByName = async (workspace: string) => {
 }
 
 export const getProfileData = async (workspace: string) => {
-    const { user } = await getUserByUsername(workspace);
+    const { workspacedata } = await getUserByUsername(workspace);
     const currentWorkspace = await getWorkspaceByName(workspace);
     try {
         const data = await client.user.findFirst({
             where: {
-                id: user?.id,
+                id: workspacedata?.user?.id,
             },
             include: {
                 link: {
                     where: {
                         workspaceId: currentWorkspace.workspace?.id,
-                        userId: user?.id
+                        userId: workspacedata?.user?.id
                     },
                     select: {
                         title: true,
@@ -237,7 +319,7 @@ export const getProfileData = async (workspace: string) => {
                 socialLink: {
                     where: {
                         workspaceId: currentWorkspace.workspace?.id,
-                        userId: user?.id
+                        userId: workspacedata?.user?.id
                     },
                     select: {
                         platform: true,
@@ -260,7 +342,6 @@ export const getProfileData = async (workspace: string) => {
         }
     }
 }
-
 
 export const createSocialLinks = async ({ platform, url, username }: CreateSocialLinksProps) => {
     const { user } = await getDbUser();
@@ -295,6 +376,13 @@ export const createSocialLinks = async ({ platform, url, username }: CreateSocia
 
 export const addProfileImage = async (image: string) => {
     const user = await currentUser();
+
+    if (!user) {
+        return {
+            success: false,
+            error: "User UnAuthenticated!"
+        }
+    }
     try {
         const updateUser = await client.user.update({
             where: {
@@ -320,6 +408,13 @@ export const addProfileImage = async (image: string) => {
 
 export const removeProfileImage = async () => {
     const user = await currentUser();
+
+     if (!user) {
+        return {
+            success: false,
+            error: "User UnAuthenticated!"
+        }
+    }
     try {
         const updateUser = await client.user.update({
             where: {
@@ -339,6 +434,71 @@ export const removeProfileImage = async () => {
         return {
             success: false,
             message: "failed to add profile image"
+        }
+    }
+}
+
+export const updateWorkspaceProfile = async ({ imageUrl, profileName, workspace }: UpdateWorkspaceProfile) => {
+    const { user } = await getDbUser();
+
+    if (!user) {
+        return {
+            success: false,
+            error: "User UnAuthenticated!"
+        }
+    }
+    try {
+        const update = await client.username.update({
+            where: {
+                username: workspace,
+            },
+            data: {
+                profileName: profileName,
+                imageUrl: imageUrl
+            }
+        })
+
+        return {
+            success: true,
+            message: "Updated workspace profile successfully"
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+        return {
+            success: false,
+            error: "failed to Update"
+        }
+    }
+}
+
+export const removeWorkspaceProfileImage = async (workspace: string) => {
+    const { user } = await getDbUser();
+
+    if (!user) {
+        return {
+            success: false,
+            error: "User UnAuthenticated!"
+        }
+    }
+    try {
+        const update = await client.username.update({
+            where: {
+                username: workspace,
+            },
+            data: {
+                imageUrl: null
+            }
+        })
+
+        return {
+            success: true,
+            message: "Removed workspace profile image successfully"
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+        return {
+            success: false,
+            error: "failed to Remove"
         }
     }
 }

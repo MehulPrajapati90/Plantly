@@ -31,10 +31,10 @@ const UserProfileModal = ({ username }: UserProfileModalProps) => {
     const [bio, setBio] = useState("");
 
     useEffect(() => {
-        if (data?.user) {
-            setFirstName(data.user.firstName || "");
-            setLastName(data.user.lastName || "");
-            setBio(data.user.bio || "");
+        if (data?.workspacedata?.user) {
+            setFirstName(data?.workspacedata?.user.firstName || "");
+            setLastName(data?.workspacedata?.user.lastName || "");
+            setBio(data?.workspacedata?.user.bio || "");
         }
     }, [data]);
 

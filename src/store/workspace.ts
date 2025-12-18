@@ -33,6 +33,11 @@ interface ProfileImageProps {
     setIsProfile: () => void;
 }
 
+interface UserWorkspaceProfile {
+    isWorkspaceProfile: boolean;
+    setWorkspaceProfile: () => void;
+}
+
 export const useSelectUsernameWorkspace = create<SelectUsernameWorkspaceProps>()(persist(
     (set) => ({
         workspace: "",
@@ -68,4 +73,9 @@ export const useSocialLinksModal = create<SocialLinksModalProps>()((set) => ({
 export const useProfileImageModal = create<ProfileImageProps>()((set) => ({
     isProfile: false,
     setIsProfile: () => set((state) => ({ isProfile: !state.isProfile }))
+}))
+
+export const useUserWorkspaceProfileModal = create<UserWorkspaceProfile>()((set) => ({
+    isWorkspaceProfile: false,
+    setWorkspaceProfile: () => set((state) => ({ isWorkspaceProfile: !state.isWorkspaceProfile }))
 }))

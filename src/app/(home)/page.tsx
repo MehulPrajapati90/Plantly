@@ -4,7 +4,6 @@ import CommunityToggle from "@/components/home/community-toggle";
 import HomeTemplate from "@/components/home/home-template";
 import WorkspaceButton from "@/components/home/workspace-button";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 const page = async () => {

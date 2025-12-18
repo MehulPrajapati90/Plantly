@@ -13,12 +13,16 @@ const WorkspaceButton = () => {
 
     console.log(data);
     const HandleOnClick = () => {
-        if (workspace) {
-            setWorkspace(workspace);
-            router.push(`/${workspace}/workspace`)
+        if (data?.usernames?.length === 0) {
+            router.push('/create-workspace');
         } else {
-            setWorkspace(data?.usernames?.[0]!);
-            router.push(`/${data?.usernames?.[0]}/workspace`)
+            if (workspace) {
+                setWorkspace(workspace);
+                router.push(`/${workspace}/workspace`)
+            } else {
+                setWorkspace(data?.usernames?.[0]!);
+                router.push(`/${data?.usernames?.[0]}/workspace`)
+            }
         }
     }
 

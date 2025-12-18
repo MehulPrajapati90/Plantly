@@ -2,19 +2,18 @@
 
 import { Share2, SquareArrowOutUpRight, Star } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import Hint from "../ui/hint";
-import { useFollowCommunityUser, useGetAllFollowedUser, useUnfollowCommunityUser } from "@/hooks/community";
+import { useFollowCommunityUser, useUnfollowCommunityUser } from "@/hooks/community";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useCommunityShareModal } from "@/store/community";
 
 interface ProfileCardsProps {
-    following?: {
-        follower: { id: string }
-    }[];
-    id?: string;
-    userId?: string;
+    // following?: {
+    //     follower: { id: string }
+    // }[];
+    // id?: string;
+    // userId?: string;
     imageUrl: string;
     name: string;
     bio: string;
@@ -24,26 +23,27 @@ interface ProfileCardsProps {
 }
 
 
-const ProfileCards = ({ imageUrl, name, bio, username, createdAt, idx, userId, id, following }: ProfileCardsProps) => {
+const ProfileCards = ({ imageUrl, name, bio, username, createdAt, idx }: ProfileCardsProps) => {
     // const { data, isPending } = useGetAllFollowedUser();
+
     const router = useRouter();
     const { setActiveCommunityProfile, setIsProfileShare } = useCommunityShareModal();
     const { mutateAsync: followMutateAsync, isPending: isFollowPending } = useFollowCommunityUser();
     const { mutateAsync: unfollowMutateAsync, isPending: isUnfollowPending } = useUnfollowCommunityUser();
 
-    const isFollowing = following?.some(f => f.follower.id === userId);
+    // const isFollowing = following?.some(f => f.follower.id === userId);
 
-    const handleFollowUser = async (username: string) => {
-        try {
-            console.log(username, userId, id);
-            const res = await followMutateAsync(username);
+    // const handleFollowUser = async (username: string) => {
+    //     try {
+    //         console.log(username, userId, id);
+    //         const res = await followMutateAsync(username);
 
-            return toast.success(`You are now following ${username}!`);
-        } catch (e) {
-            console.log(e);
-            return toast.error(`Failed to follow ${username}. Please try again.`);
-        }
-    };
+    //         return toast.success(`You are now following ${username}!`);
+    //     } catch (e) {
+    //         console.log(e);
+    //         return toast.error(`Failed to follow ${username}. Please try again.`);
+    //     }
+    // };
 
     const handleCommunityProfileShare = () => {
         setIsProfileShare();
@@ -79,8 +79,10 @@ const ProfileCards = ({ imageUrl, name, bio, username, createdAt, idx, userId, i
                     </Hint>
                 </button>
             </div>
-            <Image src={imageUrl || "/default-profile.png"} alt={name} width={80} height={80} className="w-16 h-16 rounded-full object-cover m-2 inline-block align-middle" />
-            <div className="w-full flex flex-col gap-1.5">
+            <div className="size-20 rounded-full overflow-hidden">
+                <Image src={imageUrl || "/default-profile.png"} alt={name} width={80} height={80} className="size-16 rounded-full m-2" />
+            </div>
+            <div className="w-full flex flex-col gap-1.5 pl-1">
                 <div className="flex flex-col leading-3">
                     <h2 className="text-lg font-medium">{name}</h2>
                     <h2 className="text-[12px] font-medium text-zinc-500">@{username}</h2>
