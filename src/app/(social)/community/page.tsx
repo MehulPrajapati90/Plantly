@@ -7,43 +7,62 @@ import Hint from "@/components/ui/hint";
 import { useGetDBUser } from "@/hooks/auth";
 import { useCommunityPeople } from "@/hooks/community";
 import { ArrowDown } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-type ProfileCardsTypes = {
-    link: {
-        createdAt: Date;
-        title: string;
-        url: string;
-        description: string | null;
-        clickCount: number;
-        profileImageUrl: string | null;
-    }[];
+// type ProfileCardsTypes = {
+//     link: {
+//         createdAt: Date;
+//         title: string;
+//         url: string;
+//         description: string | null;
+//         clickCount: number;
+//         profileImageUrl: string | null;
+//     }[];
+//     user: {
+//         id: string;
+//         isCommunity: boolean;
+//         firstName: string | null;
+//         lastName: string | null;
+//         imageUrl: string | null;
+//         bio: string | null;
+//         createdAt: Date;
+//         username: { username: string }[];
+//         following: { follower: { id: string } }[];
+//     };
+//     socialLinks: {
+//         createdAt: Date;
+//         url: string;
+//         platform: string;
+//     }[];
+// } & {
+//     id: string;
+//     createdAt: Date;
+//     updatedAt: Date;
+//     userId: string;
+//     username: string;
+// };
+
+interface ProfileCardsTypes {
     user: {
-        id: string;
-        isCommunity: boolean;
-        firstName: string | null;
-        lastName: string | null;
-        imageUrl: string | null;
         bio: string | null;
-        createdAt: Date;
-        username: { username: string }[];
-        following: { follower: { id: string } }[];
-    };
-    socialLinks: {
-        createdAt: Date;
-        url: string;
-        platform: string;
-    }[];
-} & {
-    id: string;
+    }
+    imageUrl: string | null;
     createdAt: Date;
-    updatedAt: Date;
-    userId: string;
-    username: string;
-};
+    username: string | null;
+    profileName: string | null;
+}
 
 const CommunityPage = () => {
+    const router = useRouter();
     const { data, isPending } = useCommunityPeople();
     const { data: userData, isPending: isUserPending } = useGetDBUser();
+
+    useEffect(() => {
+        if (userData?.user?.isCommunity === false) {
+            router.push('/');
+        }
+    }, [userData?.user]);
 
     if (isPending || isUserPending) {
         return (
@@ -74,7 +93,7 @@ const CommunityPage = () => {
         )
     }
 
-    console.log(data?.community);
+    // console.log(data?.community);
     return (
         <div className="w-full h-screen flex flex-col p-5 gap-10">
 
@@ -104,14 +123,14 @@ const CommunityPage = () => {
                 <div className="w-full h-auto flex flex-col gap-3.5">
                     {data?.community?.map((val: ProfileCardsTypes, idx: number) => (
                         <ProfileCards
-                            following={val.user.following}
+                            // following={val.user.following}
                             key={idx}
-                            userId={userData?.user?.id!}
-                            id={val.user.id}
-                            name={`${val.user.firstName} ${val?.user.lastName}`}
+                            // userId={userData?.user?.id!}
+                            // id={val.user.id}
+                            name={val.profileName!}
                             bio={val?.user.bio!}
                             username={val?.username!}
-                            imageUrl={val?.user.imageUrl!}
+                            imageUrl={val?.imageUrl!}
                             createdAt={val?.createdAt!} />
                     ))}
                 </div>

@@ -6,7 +6,7 @@ const isPublicRoute = createRouteMatcher([
     '/sign-in(.*)',
     '/sign-up(.*)',
     '/api/uploadthing',
-    '/username(.*)',
+    '/([^/]+)',  // Public workspace profiles
 ])
 
 export default clerkMiddleware(async (auth, req) => {

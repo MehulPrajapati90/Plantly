@@ -1,5 +1,5 @@
-import { addProfileImage, checkUsername, claimUsername, createLink, createSocialLinks, getProfileData, getUserByUsername, removeProfileImage, updateUserProfile } from "@/actions/workspace";
-import { CreateLinkProps, CreateSocialLinksProps, CreateWorkspace, UpdateUserProfileProps } from "@/types";
+import { addProfileImage, checkUsername, claimUsername, createLink, createSocialLinks, getProfileData, getUserByUsername, removeProfileImage, removeWorkspaceProfileImage, updateUserProfile, updateWorkspaceProfile } from "@/actions/workspace";
+import { CreateLinkProps, CreateSocialLinksProps, CreateWorkspace, UpdateUserProfileProps, UpdateWorkspaceProfile } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useCheckUsername = () => {
@@ -23,8 +23,9 @@ export const useClaimUsername = () => {
 
 export const useGetUserByUsername = (username: string) => {
     return useQuery({
-        queryKey: ['user'],
-        queryFn: async () => await getUserByUsername(username)
+        queryKey: ['user', username],
+        queryFn: async () => await getUserByUsername(username),
+        enabled: !!username
     })
 }
 
@@ -45,6 +46,7 @@ export const useCreateLinks = () => {
         mutationFn: async (data: CreateLinkProps) => await createLink(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['links'] })
+            queryClient.invalidateQueries({ queryKey: ['user'] })
             queryClient.invalidateQueries({ queryKey: ['user-social-links'] })
         }
     })
@@ -63,6 +65,7 @@ export const useCreateSocialLinks = () => {
         mutationFn: async (data: CreateSocialLinksProps) => await createSocialLinks(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['social'] })
+            queryClient.invalidateQueries({ queryKey: ['user'] })
             queryClient.invalidateQueries({ queryKey: ['user-social-links'] })
         }
     })
@@ -84,6 +87,30 @@ export const useRemoveProfileImage = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async () => await removeProfileImage(),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['user'] });
+            queryClient.invalidateQueries({ queryKey: ['links'] })
+            queryClient.invalidateQueries({ queryKey: ['user-social-links'] });
+        }
+    })
+}
+
+export const useUpdateWorkspaceProfile = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async ({ profileName, imageUrl, workspace }: UpdateWorkspaceProfile) => await updateWorkspaceProfile({ profileName, imageUrl, workspace }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['user'] });
+            queryClient.invalidateQueries({ queryKey: ['links'] })
+            queryClient.invalidateQueries({ queryKey: ['user-social-links'] });
+        }
+    })
+}
+
+export const useRemoveWorkspaceImage = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (workspace: string) => await removeWorkspaceProfileImage(workspace),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['user'] });
             queryClient.invalidateQueries({ queryKey: ['links'] })

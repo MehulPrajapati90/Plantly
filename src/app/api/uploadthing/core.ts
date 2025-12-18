@@ -69,6 +69,37 @@ export const ourFileRouter = {
             return { fileUrl: file.url }
         }),
 
+    UpdateProfileImage: f({
+        image: {
+            maxFileSize: "4MB",
+            maxFileCount: 1
+        }
+    })
+        .input(z.object({
+            username: z.string()
+        }))
+        .middleware(async ({ input }) => {
+            const user = await currentUser();
+            if (!user) throw new UploadThingError("Unauthorized");
+            if (!input?.username) throw new UploadThingError("Workspace required");
+            return { username: input?.username }
+        })
+        .onUploadComplete(async ({ metadata, file }) => {
+            await client.username.update({
+                where: {
+                    username: metadata.username!
+                },
+                data: {
+                    imageUrl: file.url
+                }
+            })
+            if (!metadata.username) {
+                throw new UploadThingError("No Workspace provided in metadata");
+            }
+
+            return { fileUrl: file.url };
+        }),
+
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

@@ -37,7 +37,7 @@ interface PreviewProps {
     workspace: string
 }
 
-const Preview = ({ workspace, workspacedata }: PreviewProps) => {
+const ProfilePreviewWrapper = ({ workspace, workspacedata }: PreviewProps) => {
     const pathname = usePathname();
     const [copy, setCopy] = useState<boolean>(false);
 
@@ -65,14 +65,9 @@ const Preview = ({ workspace, workspacedata }: PreviewProps) => {
     const name = `${workspacedata?.profileName || ''}`;
     const formateWorkspaceName = workspace.charAt(0).toUpperCase() + workspace.slice(1);
     return (
-        <div className="w-full min-h-auto p-6 flex">
-            <div className="flex flex-col gap-2">
-                <span className="text-2xl font-sans font-medium tracking-tight">Preview !</span>
-                <span className="text-[12px] font-sans font-medium tracking-tight w-[80%]">See the real-time changes while development!</span>
-            </div>
-
+        <div className="min-h-auto p-6 flex">
             {/* main Preview Box */}
-            <div className="w-[450px] h-120 bg-black rounded-[30px] border border-[#3b3b3f] py-10 relative overflow-y-auto hidden-scrollbar flex flex-col justify-between items-center">
+            <div className="w-[400px] h-150 bg-black rounded-[30px] border border-[#3b3b3f] py-10 relative overflow-y-auto hidden-scrollbar flex flex-col justify-between items-center">
                 <div className="w-full h-auto">
                     <div className="w-full flex items-center justify-between px-5 absolute top-0 py-5">
                         <ModeToggle />
@@ -159,9 +154,8 @@ const Preview = ({ workspace, workspacedata }: PreviewProps) => {
                     </div>
                 </div>
             </div>
-
         </div>
     )
 }
 
-export default Preview;
+export default ProfilePreviewWrapper;

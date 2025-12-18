@@ -23,3 +23,9 @@ export interface CreateWorkspace {
     imageUrl: string;
     profileName: string;
 }
+
+export interface UpdateWorkspaceProfile {
+    profileName: string;
+    imageUrl: string;
+    workspace: string;
+}

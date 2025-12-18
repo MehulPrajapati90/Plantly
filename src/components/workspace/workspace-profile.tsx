@@ -1,33 +1,49 @@
 "use client";
 
-import { useGetUserByUsername } from "@/hooks/workspace";
 import { Eye, HomeIcon, Instagram, Pen, Plus, Settings2, Share2 } from "lucide-react";
 import Image from "next/image";
 import Hint from "../ui/hint";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
-import { usePathname, useRouter } from "next/navigation";
-import { useProfileImageModal, useShareModal, useSocialLinksModal, useUserProfileModal } from "@/store/workspace";
+import { useRouter } from "next/navigation";
+import { useProfileImageModal, useShareModal, useSocialLinksModal, useUserProfileModal, useUserWorkspaceProfileModal } from "@/store/workspace";
+import { toast } from "sonner";
 
 interface WorkspaceProfileProps {
+    workspacedata: {
+        username: string | null;
+        user: {
+            id: string;
+            firstName: string | null;
+            lastName: string | null;
+            imageUrl: string | null;
+            bio: string | null;
+        };
+        link: {
+            title: string;
+            url: string;
+            description: string | null;
+            clickCount: number;
+            profileImageUrl: string | null;
+        }[];
+        imageUrl: string | null;
+        profileName: string | null;
+        socialLinks: {
+            url: string;
+            platform: string;
+        }[];
+    } | null;
     workspace: string
 }
 
-const WorkspaceProfile = ({ workspace }: WorkspaceProfileProps) => {
+const WorkspaceProfile = ({ workspace, workspacedata }: WorkspaceProfileProps) => {
     const router = useRouter();
-    const pathname = usePathname();
     const { setIsProfile } = useProfileImageModal();
-    const { data, isPending } = useGetUserByUsername(workspace);
     const { setIsSocialLinks } = useSocialLinksModal();
     const { setIsShare, setActiveWorkspace } = useShareModal();
-    const profilePhoto = data?.user?.imageUrl;
+    const profilePhoto = workspacedata?.imageUrl;
     const { setIsUserProfile } = useUserProfileModal();
-
-    if (isPending) {
-        return (
-            <div className="p-10 flex justify-center items-center">Loading...</div>
-        )
-    }
+    const { setWorkspaceProfile } = useUserWorkspaceProfileModal();
 
     const handlePreview = () => {
         router.push(`/${workspace}`);
@@ -42,7 +58,15 @@ const WorkspaceProfile = ({ workspace }: WorkspaceProfileProps) => {
         setIsUserProfile();
     }
 
+    const handleUpdateUserWorkspaceProfile = () => {
+        setWorkspaceProfile();
+    }
+
     const handleSocialLinks = () => {
+        if (workspacedata?.socialLinks.length === 3) {
+            toast.error("You have reached the maximum limit of displayble social links (3).");
+            return;
+        }
         setIsSocialLinks();
     }
 
@@ -63,8 +87,8 @@ const WorkspaceProfile = ({ workspace }: WorkspaceProfileProps) => {
                         <p className="text-[13px] font-sans font-normal text-zinc-400 leading-5">add your bio here ...</p>
                     </div>
 
-                    <Hint label="Update profile">
-                        <div onClick={handleUpdateUserProfile}>
+                    <Hint label="Update Workspace profile">
+                        <div onClick={handleUpdateUserWorkspaceProfile}>
                             <Pen size={16} className="text-zinc-400 mb-3.5" />
                         </div>
                     </Hint>
@@ -86,8 +110,8 @@ const WorkspaceProfile = ({ workspace }: WorkspaceProfileProps) => {
                         <Instagram size={18} />
                     </Button>
                 </Hint>
-                <Hint label="Settings" asChild>
-                    <Button className="bg-transparent hover:bg-zinc-700 text-zinc-400 hover:text-white">
+                <Hint label="Update User profile" asChild>
+                    <Button onClick={handleUpdateUserProfile} className="bg-transparent hover:bg-zinc-700 text-zinc-400 hover:text-white">
                         <Settings2 size={18} />
                     </Button>
                 </Hint>
