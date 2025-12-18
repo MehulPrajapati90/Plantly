@@ -33,15 +33,7 @@ export const onBoardUser = async () => {
                 lastName: lastName || null,
                 imageUrl: imageUrl || null,
                 email: emailAddresses[0]?.emailAddress || "",
-                username: {
-                    create: {
-                        username: user?.username!
-                    }
-                }
             },
-            include: {
-                username: true,
-            }
         })
 
         return {

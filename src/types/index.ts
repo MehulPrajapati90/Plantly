@@ -17,3 +17,9 @@ export interface CreateSocialLinksProps {
     url: string;
     platform: string;
 }
+
+export interface CreateWorkspace {
+    username: string;
+    imageUrl: string;
+    profileName: string;
+}

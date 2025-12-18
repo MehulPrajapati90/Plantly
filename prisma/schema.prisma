@@ -28,10 +28,12 @@ model User {
 }
 
 model Username {
-  id       String @id @default(cuid())
-  username String @unique
-  userId   String
-  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          String  @id @default(cuid())
+  username    String?  @unique
+  profileName String?
+  imageUrl    String?
+  userId      String
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   link        Link[]
   socialLinks SocialLink[]

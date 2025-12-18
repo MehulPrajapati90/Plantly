@@ -1,5 +1,5 @@
 import { addProfileImage, checkUsername, claimUsername, createLink, createSocialLinks, getProfileData, getUserByUsername, removeProfileImage, updateUserProfile } from "@/actions/workspace";
-import { CreateLinkProps, CreateSocialLinksProps, UpdateUserProfileProps } from "@/types";
+import { CreateLinkProps, CreateSocialLinksProps, CreateWorkspace, UpdateUserProfileProps } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useCheckUsername = () => {
@@ -14,7 +14,7 @@ export const useCheckUsername = () => {
 export const useClaimUsername = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async (username: string) => await claimUsername(username),
+        mutationFn: async ({ imageUrl, profileName, username }: CreateWorkspace) => await claimUsername({ imageUrl, profileName, username }),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['username'] })
         }

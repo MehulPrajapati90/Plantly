@@ -3,7 +3,7 @@
 import client from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { getDbUser } from "./auth";
-import { CreateLinkProps, CreateSocialLinksProps, UpdateUserProfileProps } from "@/types";
+import { CreateLinkProps, CreateSocialLinksProps, CreateWorkspace, UpdateUserProfileProps } from "@/types";
 
 export const checkUsername = async (username: string) => {
     const user = await currentUser();
@@ -60,18 +60,21 @@ export const getSuggestion = async (base: string, count = 3, maxTries = 10) => {
     return suggestions;
 }
 
-export const claimUsername = async (username: string) => {
+export const claimUsername = async ({ imageUrl, profileName, username }: CreateWorkspace) => {
     const { user } = await getDbUser();
     try {
         const claim = await client.username.create({
             data: {
                 userId: user?.id!,
+                imageUrl: imageUrl,
+                profileName: profileName,
                 username: username!
             }
         })
 
         return {
             success: true,
+            username: claim?.username,
             message: "Claimed Successfully!"
         }
     } catch (e) {

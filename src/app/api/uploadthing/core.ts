@@ -51,7 +51,23 @@ export const ourFileRouter = {
             if (!metadata.id) {
                 throw new UploadThingError("No link ID provided in metadata");
             }
+        }),
+
+
+    UploadWorkspaceImage: f({
+        image: {
+            maxFileSize: "4MB",
+            maxFileCount: 1
+        }
+    })
+        .middleware(async ({ input }) => {
+            const user = await currentUser();
+            if (!user) throw new UploadThingError("Unauthorized");
+            return { user: user };
         })
+        .onUploadComplete(async ({ file }) => {
+            return { fileUrl: file.url }
+        }),
 
 } satisfies FileRouter;
 

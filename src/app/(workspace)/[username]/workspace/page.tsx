@@ -1,4 +1,3 @@
-import { getDbUser } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Preview from "@/components/workspace/preview";
