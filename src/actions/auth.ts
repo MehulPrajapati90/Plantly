@@ -53,7 +53,7 @@ export const onBoardUser = async () => {
 export const getDbUser = async () => {
     const user = await currentUser();
 
-    if(!user) {
+    if (!user) {
         return {
             success: false,
             message: "User UnAuthenticated"
@@ -92,7 +92,7 @@ interface ItemsUsernames {
     createdAt: Date;
     updatedAt: Date;
     userId: string;
-    username: string;
+    username: string | null;
 }
 
 export const getUsernamesOfUser = async () => {
