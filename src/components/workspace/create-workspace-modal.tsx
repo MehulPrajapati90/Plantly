@@ -77,55 +77,55 @@ const CreateWorkspaceModal = () => {
 
     return (
         <Dialog open={true} >
-            <DialogContent className='sm:max-w-[425px]'>
+            <DialogContent className='sm:max-w-[480px] bg-[#0b1021] text-white border border-white/10 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.8)]'>
                 <DialogHeader>
-                    <DialogTitle>Create new Workspace</DialogTitle>
+                    <DialogTitle className="text-white">Create new Workspace</DialogTitle>
 
-                    <DialogDescription className='text-[12.5px] leading-3'>
+                    <DialogDescription className='text-[12.5px] leading-4 text-white/70'>
                         proceed and enter a unique identifier!
                     </DialogDescription>
                 </DialogHeader>
 
                 <div className='flex flex-col justify-start items-center gap-3 min-h-auto pt-2'>
                     <div className="flex flex-col justify-center items-start min-h-auto w-full gap-[5px]">
-                        <Label htmlFor="username" className="font-sans font-normal text-[12px] text-[#f3f3f3]">Workspace name</Label>
+                        <Label htmlFor="username" className="font-sans font-normal text-[12px] text-white/80">Workspace name</Label>
                         <Input
                             id="username"
                             type="text"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            className="accent-blue-500"
+                            className="accent-blue-500 bg-white/5 border-white/15 text-white placeholder:text-white/50 focus-visible:ring-[#4e7bff]"
                         />
                     </div>
                 </div>
                 {suggestion.length > 0 && (
                     <div className='flex justify-start items-center px-2'>
-                        <p className='text-[13px] text-red-500 font-medium pr-5'>Suggestions</p>
+                        <p className='text-[13px] text-[#f97316] font-medium pr-5'>Suggestions</p>
                         <Separator orientation='vertical' />
                         {suggestion.map((item) => (
-                            <Button key={item} onClick={() => setUsername(item)} variant={"link"} className='text-[13px] text-zinc-400 font-normal'>{item}</Button>
+                            <Button key={item} onClick={() => setUsername(item)} variant={"link"} className='text-[13px] text-white/80 font-normal hover:text-white'>{item}</Button>
                         ))}
                     </div>
                 )}
 
                 <div className='flex flex-col justify-start items-center gap-3 min-h-auto'>
                     <div className="flex flex-col justify-center items-start min-h-auto w-full gap-[5px]">
-                        <Label htmlFor="username" className="font-sans font-normal text-[12px] text-[#f3f3f3]">Workspace profile name</Label>
+                        <Label htmlFor="username" className="font-sans font-normal text-[12px] text-white/80">Workspace profile name</Label>
                         <Input
                             id="profile name"
                             type="text"
                             value={workpaceProfileName}
                             onChange={(e) => setworkpaceProfileName(e.target.value)}
-                            className="accent-blue-500"
+                            className="accent-blue-500 bg-white/5 border-white/15 text-white placeholder:text-white/50 focus-visible:ring-[#4e7bff]"
                         />
                     </div>
                 </div>
                 <div className='gap-3 pt-2'>
                     {workspaceImage ? (
-                        <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10">
+                        <div className="relative aspect-video rounded-xl overflow-hidden border border-white/15 bg-black/40">
                             <div className="absolute top-2 right-2 z-10">
                                 <Hint asChild side="left" label="Remove thumbnail">
-                                    <Button type="button" onClick={handleRemove} disabled={isPending} className="h-auto w-auto p-1.5">
+                                    <Button type="button" onClick={handleRemove} disabled={isPending} className="h-auto w-auto p-1.5 bg-white/10 hover:bg-white/20">
                                         <Trash className="h-4 w-4" />
                                     </Button>
                                 </Hint>
@@ -138,7 +138,7 @@ const CreateWorkspaceModal = () => {
                             />
                         </div>
                     ) : (
-                        <div className="rounded-xl border outline-dashed outline-muted w-full object-fill">
+                        <div className="rounded-xl border border-white/10 bg-white/5 outline-dashed outline-white/20 w-full object-fill">
                             <UploadDropzone<OurFileRouter, "UploadWorkspaceImage">
                                 endpoint="UploadWorkspaceImage"
                                 appearance={{
@@ -149,7 +149,7 @@ const CreateWorkspaceModal = () => {
                                         color: "#FFFFFF"
                                     },
                                     button: {
-                                        backgroundColor: "#00aeff",
+                                        backgroundColor: "#4e7bff",
                                         padding: "8px 10px"
                                     }
                                 }}
@@ -163,14 +163,16 @@ const CreateWorkspaceModal = () => {
                 </div>
 
                 <DialogFooter className="relative w-full flex items-center justify-center px-1">
-                    {(isPending || isLoading) && (<LoaderCircle size={20} className="absolute left-4 text-[#f3f3f3] animate-spin" />)}
+                    {(isPending || isLoading) && (<LoaderCircle size={20} className="absolute left-4 text-white animate-spin" />)}
 
-                    {!isPending && !isLoading && username && suggestion.length > 0 && (<X className='absolute left-4 text-red-500' />)}
+                    {!isPending && !isLoading && username && suggestion.length > 0 && (<X className='absolute left-4 text-[#f97316]' />)}
 
-                    {!isPending && !isLoading && username && suggestion.length === 0 && (<CheckCheck className='absolute left-4 text-green-500' />)}
+                    {!isPending && !isLoading && username && suggestion.length === 0 && (<CheckCheck className='absolute left-4 text-[#10b981]' />)}
 
                     <div className="flex gap-2">
-                        <Button disabled={isPending || isLoading || !username || suggestion.length > 0 || !workpaceProfileName || !workspaceImage} onClick={handleClaimUsername}>Claim</Button>
+                        <Button disabled={isPending || isLoading || !username || suggestion.length > 0 || !workpaceProfileName || !workspaceImage} onClick={handleClaimUsername} className="bg-[#1341D0] hover:bg-[#0f33a6] text-white rounded-[8px]">
+                            Claim
+                        </Button>
                     </div>
                 </DialogFooter>
             </DialogContent>

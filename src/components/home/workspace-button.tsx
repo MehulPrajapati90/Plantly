@@ -36,7 +36,7 @@ const WorkspaceButton = () => {
 
     return (
         <div>
-            <Button onClick={HandleOnClick} className="bg-[#1341D0] text-white hover:bg-blue-500 rounded-[5px]">
+            <Button onClick={HandleOnClick} className="bg-[#1341D0] text-white hover:bg-[#0f33a6] active:translate-y-[1px] rounded-[6px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#4e7bff] focus-visible:outline-offset-2 transition">
                 <span>
                     Get Started
                 </span>
