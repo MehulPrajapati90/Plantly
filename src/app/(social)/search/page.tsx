@@ -8,11 +8,11 @@ import { useGetCommunityPeopleBySearchTerm } from "@/hooks/community";
 import { useSearchState } from "@/store/community";
 import { ArrowDown } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect } from "react";
+import { useEffect } from "react";
 
 const SearchPage = () => {
     const { isSearchQuery, setIsSearchQuery } = useSearchState();
-    const { data, isPending } = useGetCommunityPeopleBySearchTerm(isSearchQuery || "");
+    const { data, isPending } = useGetCommunityPeopleBySearchTerm(isSearchQuery.toLowerCase() || "");
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const router = useRouter();
@@ -61,10 +61,10 @@ const SearchPage = () => {
                 data?.results ? (
                     <div className="w-full h-auto flex flex-col gap-2">
                         <ProfileCards
-                            name={`${data?.results?.user.firstName} ${data?.results?.user.lastName}`}
+                            name={`${data?.results?.profileName}`}
                             bio={data?.results?.user.bio!}
                             username={data?.results?.username!}
-                            imageUrl={data?.results?.user.imageUrl!}
+                            imageUrl={data?.results?.imageUrl!}
                             createdAt={data?.results?.createdAt!} />
                     </div>
                 ) : (

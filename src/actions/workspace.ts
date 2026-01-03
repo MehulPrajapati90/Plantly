@@ -13,12 +13,12 @@ export const checkUsername = async (username: string) => {
     try {
         const isTaken = await client.username.findFirst({
             where: {
-                username: username
+                username: username.toLowerCase()
             }
         })
 
         if (isTaken) {
-            const suggestion = await getSuggestion(username, 3, 10);
+            const suggestion = await getSuggestion(username.toLowerCase(), 3, 10);
             return {
                 success: true,
                 suggestion: suggestion,
@@ -68,7 +68,7 @@ export const claimUsername = async ({ imageUrl, profileName, username }: CreateW
                 userId: user?.id!,
                 imageUrl: imageUrl,
                 profileName: profileName,
-                username: username!
+                username: username.toLowerCase()!
             }
         })
 
@@ -409,7 +409,7 @@ export const addProfileImage = async (image: string) => {
 export const removeProfileImage = async () => {
     const user = await currentUser();
 
-     if (!user) {
+    if (!user) {
         return {
             success: false,
             error: "User UnAuthenticated!"

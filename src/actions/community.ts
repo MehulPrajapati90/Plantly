@@ -122,17 +122,14 @@ export const getCommunityUserBySearchTerm = async (term: string) => {
             where: {
                 username: term
             },
-            include: {
+            select: {
+                imageUrl: true,
+                profileName: true,
+                username: true,
+                createdAt: true,
                 user: {
                     select: {
-                        id: true,
                         bio: true,
-                        firstName: true,
-                        lastName: true,
-                        createdAt: true,
-                        imageUrl: true,
-                        isCommunity: true,
-                        following: true
                     }
                 }
             }
